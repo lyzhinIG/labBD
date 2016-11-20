@@ -98,7 +98,17 @@ for($i=1;$i<2;$i++){
     $s2 = rand (8,13);
     $s3 = rand(6,15);
     $fio = "".random_string(1, "upper")."".random_string($s, "lower")." ".random_string(1, "upper")."".random_string($s2, "lower")." ".random_string(1, "upper")."".random_string($s3, "lower")."";
-    echo $fio;
+    $m=rand(1,12);
+    $d = rand(1,28);
+    $year = rand(1901,2002);
+    $data_r = date("M:d:Y", mktime(0, 0, 0, $m, $d, $year));//тут тип вывода
+    if(rand(0,1)==1){
+        $prim=random_string($s3, "lower");
+    }
+        else $prim='';
+    $n_kamer = rand(1,999);
+    $oplata = rand (500,1500000);
+    
 }
 
 if(mysql_close($dbcnx)) // разрываем соединение
