@@ -1,16 +1,24 @@
 <?php
-$host="mysql2.justhost.ru ";/*Имя сервера*/
-$user="u8002f93_lyzhin";/*Имя пользователя*/
-$password="112233";/*Пароль пользователя*/
-$db="u8002f93_laba";/*Имя базы данных*/
+header("Content-type: text/html; charset=utf-8");
+include 'config.php';
+$dbcnx = mysql_connect($DBlocation,$DBuser,$DBpasswd);
+mysql_set_charset('utf8');
+if (!$dbcnx) // Если дескриптор равен 0 соединение не установлено
+{
+  echo("<P>В настоящий момент сервер базы данных не доступен, поэтому 
+           корректное отображение страницы невозможно.</P>");
+  exit();
+}
 
- 
-// подключаемся к серверу
-$link = mysql_connect($host, $user, $password, $db) 
-    or die("Ошибка " . mysql_error($link));
- 
-// выполняем операции с базой данных
-     
-// закрываем подключение
-mysql_close($link);
+
+
+if(mysql_close($dbcnx)) // разрываем соединение
+{
+  echo("Соединение с базой данных прекращено");
+}
+else
+{
+  echo("Не удалось завершить соединение");
+}
+echo "god";
 ?>
