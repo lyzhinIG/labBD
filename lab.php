@@ -244,8 +244,207 @@ echo ' <form action="lab.php" method="get">
             echo "</table>";
      }
   }
-  if ($_GET['lab'==4]){
+  if ($_GET['lab']==4){
+      echo "<h3>Исходные таблицы</h3><br> <b>политика</b><br>";
       
+        $zapros ='SELECT * from news_politica';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,ID), 
+            "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td></tr>"; 
+            echo "</table><hr> <b>Образование</b>";
+                 $zapros ='SELECT * from news_edu';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>Автор</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,ID), 
+            "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data_pub),
+             "</td><td>",mysql_result($result,$i,autor),
+            "</td></tr>"; 
+            echo "</table><hr>";
   }
+  if ($_GET['p']==1){
+           echo "<b>Объединение</b><br>
+                SELECT `title` `text`, `data` <br>
+                FROM `news_politica` <br>
+                UNION <br>
+                SELECT `title` `text`, `data_pub` <br>
+                FROM `news_edu`";
+                 $zapros ='SELECT  `title` ,  `text` ,  `data` 
+                            FROM  `news_politica` 
+                            UNION 
+                            SELECT  `title` ,  `text` ,  `data_pub` 
+                            FROM  `news_edu` ';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>Загаловок</th><th>Текст</th><th>Дата</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td></tr>"; 
+            echo "</table><hr>";
+  }
+    if ($_GET['p']==2){
+           echo "<b>Разность</b><br>
+                SELECT e.title, e.text, e.data_pub<br>
+                    FROM news_edu e LEFT JOIN news_politica p <br>
+                    ON p.title = p.title AND p.text = e.text AND e.data_pub=p.data<br>
+                    WHERE p.title IS NULL and p.text IS NULL";
+                 $zapros ='SELECT e.title, e.text, e.data_pub
+                FROM news_edu e LEFT JOIN news_politica p 
+                ON p.title = p.title AND p.text = e.text AND e.data_pub=p.data
+                WHERE p.title IS NULL and p.text IS NULL';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>Загаловок</th><th>Текст</th><th>Дата</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data_pub),
+            "</td></tr>"; 
+            echo "</table><hr>";
+  }
+   if ($_GET['p']==3){
+           echo "<b>Пересечение INTERSECT</b><br>
+               SELECT p.title, p.text, p.data<br>
+                FROM news_politica p JOIN news_edu e<br>
+                ON p.title=e.title AND p.text = e.text AND p.data=e.data_pub;";
+                 $zapros ='SELECT p.title, p.text, p.data
+                            FROM news_politica p JOIN news_edu e
+                            ON p.title=e.title AND p.text = e.text AND p.data=e.data_pub';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>Загаловок</th><th>Текст</th><th>Дата</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td></tr>"; 
+            echo "</table><hr>";
+  }
+  
+   if ($_GET['p']==4){
+           echo "<b>Декартово произведение</b><br>
+           <i>16 строк</i><br>
+               SELECT * FROM news_politica, news_edu";
+                 $zapros ='SELECT * FROM news_politica, news_edu';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>автор</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data_pub),
+            "</td><td>",mysql_result($result,$i,autor),
+            "</td></tr>"; 
+            echo "</table><hr>";
+            echo ' <i>4 строки</i><br>
+                SELECT * <br>
+                FROM news_politica p, news_edu e<br>
+                WHERE e.id = p.id<br>';
+                $zapros ='SELECT * 
+                FROM news_politica p, news_edu e
+                WHERE e.id = p.id';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>автор</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data_pub),
+            "</td><td>",mysql_result($result,$i,autor),
+            "</td></tr>"; 
+            echo "</table><hr>";
+            
+            echo "<i>2 строки</i><br>
+                SELECT * FROM news_politica p , news_edu e<br>
+                WHERE e.title=p.title";
+                $zapros ='SELECT * FROM news_politica p , news_edu e
+                    WHERE e.title=p.title';
+            $result=mysql_query($zapros); 
+            //$result - ассоциированный массив, т.е. таблички, у которой есть названия столбцов 
+            //узнаем, сколько в массиве $result строчек 
+            $n=mysql_num_rows($result); 
+            //вывод на страничку в виде таблицы 
+            echo "<table border=1> 
+            <tr><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>ID</th><th>Загаловок</th><th>Текст</th><th>Дата</th><th>автор</th></tr>"; 
+            //вывод построчно 
+            for($i=0;$i<$n;$i++) 
+             echo  
+            "<tr><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data),
+            "</td><td>",mysql_result($result,$i,ID),
+           "</td><td>",mysql_result($result,$i,title),
+            "</td><td>",mysql_result($result,$i,text),
+            "</td><td>",mysql_result($result,$i,data_pub),
+            "</td><td>",mysql_result($result,$i,autor),
+            "</td></tr>"; 
+            echo "</table><hr>";
+  }
+  
+  
   
 ?>
